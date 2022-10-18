@@ -15,7 +15,7 @@ df <- readxl::read_excel("data/Ephor_F3FIHL8B_20220926.xlsx", sheet = "exposome1
 library(dplyr)
 dplyr::
   names(df)
-df$month<-lubridate::month(df$timestamp)
+df$month<-lubridate::month(df$timestamp, label=T)
 df_sum <- df %>%
   group_by(month) %>%
   summarise(
@@ -35,13 +35,13 @@ ggplot(df_sum, aes(x=month, y=meantemp, group=1))+
 
 # altogether
 readr::read_csv("data/Ephor_F3FIHL8B_20220926.csv") %>%
-mutate(month = lubridate::month(timestamp)) %>%
+mutate(month = lubridate::month(timestamp, label=T)) %>%
   group_by(month) %>%
   summarise(
     n = n(),
     meantemp = 	mean(temperature, 
                      na.rm = TRUE)) %>%
-  ggplot(., aes(x=month, y=meantemp, group=1))+
+  ggplot(., aes(x=as.factor(month), y=meantemp, group=1))+
   geom_line()+
   theme_classic()+
   labs(title="I made this using R tidyverse",
